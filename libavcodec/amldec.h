@@ -2,7 +2,7 @@
 #define _AMLDEC_H_
 
 #include "amlqueue.h"
-#include <amcodec/codec.h>
+#include <codec.h>
 #include <libavutil/buffer.h>
 
 #include <time.h>

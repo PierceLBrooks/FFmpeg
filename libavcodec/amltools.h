@@ -3,7 +3,7 @@
 #define _AMLTOOLS_H_
 
 #include "avcodec.h"
-#include "amcodec/amports/vformat.h"
+#include "amports/vformat.h"
 
 // system IO operation to set kernel driver parameters
 int amlsysfs_write_string(AVCodecContext *avctx, const char *path, const char *value);
