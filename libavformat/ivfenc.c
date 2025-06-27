@@ -38,9 +38,10 @@ static int ivf_init(AVFormatContext *s)
     par = s->streams[0]->codecpar;
     if (par->codec_type != AVMEDIA_TYPE_VIDEO ||
         !(par->codec_id == AV_CODEC_ID_AV1 ||
+          par->codec_id == AV_CODEC_ID_H264 ||
           par->codec_id == AV_CODEC_ID_VP8 ||
           par->codec_id == AV_CODEC_ID_VP9)) {
-        av_log(s, AV_LOG_ERROR, "Currently only VP8, VP9 and AV1 are supported!\n");
+        av_log(s, AV_LOG_ERROR, "Currently only H264, VP8, VP9 and AV1 are supported!\n");
         return AVERROR(EINVAL);
     }
 
@@ -66,6 +67,7 @@ static int ivf_write_header(AVFormatContext *s)
     avio_wl16(pb, 0); // version
     avio_wl16(pb, 32); // header length
     avio_wl32(pb,
+              par->codec_id == AV_CODEC_ID_H264 ? AV_RL32("H264") :
               par->codec_id == AV_CODEC_ID_VP9 ? AV_RL32("VP90") :
               par->codec_id == AV_CODEC_ID_VP8 ? AV_RL32("VP80") : AV_RL32("AV01"));
     avio_wl16(pb, par->width);
@@ -113,6 +115,7 @@ static int ivf_write_trailer(AVFormatContext *s)
 }
 
 static const AVCodecTag codec_ivf_tags[] = {
+    { AV_CODEC_ID_H264,  MKTAG('H', '2', '6', '4') },
     { AV_CODEC_ID_VP8,  MKTAG('V', 'P', '8', '0') },
     { AV_CODEC_ID_VP9,  MKTAG('V', 'P', '9', '0') },
     { AV_CODEC_ID_AV1,  MKTAG('A', 'V', '0', '1') },
